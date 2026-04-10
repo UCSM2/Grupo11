@@ -8,24 +8,24 @@ public class Main {
         int numZonas = 3;
         int maxPaquetesPorZona = 4;
 
-        // Matriz de paquetes por zonas
+        //matriz por zonas
         Paquete<Integer>[][] matrizZonas = new Paquete[numZonas][maxPaquetesPorZona];
 
-        // Simulando la lectura de archivo línea por línea (puedes adaptarlo a un BufferedReader real si gustan)
+        //simulando archivos
         String[] lineasArchivo = {
             "Z1P1,4,Alta,2,1", "Z1P2,2,Media,4,1", "Z1P3,6,Alta,5,1", "Z1P4,3,Baja,1,1",
             "Z2P1,5,Alta,3,2", "Z2P2,1,Baja,2,2", "Z2P3,4,Media,5,2", "Z2P4,7,Alta,7,2",
             "Z3P1,3,Media,4,3", "Z3P2,2,Baja,8,3", "Z3P3,5,Alta,4,3", "Z3P4,6,Alta,5,3"
         };
 
-        // Cargar matriz
+        //cargar matriz
         int[] contadores = new int[numZonas];
         for (String linea : lineasArchivo) {
             String[] partes = linea.split(",");
             String cod = partes[0].trim();
             int peso = Integer.parseInt(partes[1].trim());
             
-            // Mapeo de prioridad a Entero para usar Genericidad y que se ordene bien
+            //mapeo de prioridad a Entero para usar Genericidad y que se ordene bien
             String prioStr = partes[2].trim();
             int prioridadNum = prioStr.equals("Alta") ? 3 : (prioStr.equals("Media") ? 2 : 1);
             
@@ -36,11 +36,10 @@ public class Main {
             contadores[zona]++;
         }
 
-        // 1 y 2. Mostrar Matriz original (Antes del ordenamiento)
         System.out.println("=== 1. MATRIZ ORIGINAL POR ZONAS (ANTES DEL ORDENAMIENTO) ===");
         mostrarMatriz(matrizZonas);
 
-        // 3. Ordenar paquetes (Usando Insertion en Zona 1 y QuickSort en Zona 2 y 3 para variar)
+        //ordenar paquetes (Usando Insertion en Zona 1 y QuickSort en Zona 2 y 3 para variar)
         System.out.println("\n=== 2. MATRIZ DESPUES DEL ORDENAMIENTO (MAYOR A MENOR PRIORIDAD) ===");
         Ordenador.insertionSort(matrizZonas[0]); // Zona 1 con Insertion
         Ordenador.quickSort(matrizZonas[1], 0, matrizZonas[1].length - 1); // Zona 2 con Quick
@@ -48,7 +47,7 @@ public class Main {
         
         mostrarMatriz(matrizZonas);
 
-        // 4. Aplanar matriz para meter al camión
+        //aplanar matriz para meter al camión
         Paquete<Integer>[] todosLosPaquetes = new Paquete[numZonas * maxPaquetesPorZona];
         int idx = 0;
         for (int i = 0; i < numZonas; i++) {
@@ -61,11 +60,11 @@ public class Main {
 
         System.out.println("\n=== 3. SELECCION DE PAQUETES (CAPACIDAD CAMION: " + capacidadCamion + ") ===");
         
-        // Ejecución Recursiva (solo para comprobar valor maximo)
+      
         int valorMaximo = OptimizadorCamion.mochilaRecursiva(todosLosPaquetes, capacidadCamion, todosLosPaquetes.length);
         System.out.println("Valorización máxima posible (Recursivo): " + valorMaximo);
 
-        // Ejecución DP (Para saber qué paquetes exactos llevar)
+
         List<Paquete<?>> seleccionados = OptimizadorCamion.mochilaDP(todosLosPaquetes, capacidadCamion);
         System.out.println("\nPaquetes cargados en el camión (Programación Dinámica):");
         int pesoTotal = 0;
